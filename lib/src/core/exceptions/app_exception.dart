@@ -36,16 +36,6 @@ class ServerException extends AppException {
         );
 }
 
-class CacheException extends AppException {
- CacheException([String? originalException])
-      : super(
-          message: 'Erro ao ecessar dados locais.',
-          code: 'CACHE_ERROR',
-          status: 0,
-          originalException: originalException,
-        );
-}
-
 class TimeoutException extends AppException {
  TimeoutException([String? originalException])
       : super(

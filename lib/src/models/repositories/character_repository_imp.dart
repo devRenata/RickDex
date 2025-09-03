@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:rick/src/core/exceptions/app_exception.dart';
 import 'package:rick/src/core/endpoints.dart';
 import 'package:rick/src/core/exceptions/app_exception_handler.dart';
-import 'package:rick/src/data/entities/character.dart';
-import 'package:rick/src/data/repositories/character_repository.dart';
+import 'package:rick/src/models/entities/character.dart';
+import 'package:rick/src/models/repositories/character_repository.dart';
 
 class CharacterRepositoryImp implements CharacterRepository {
   final Dio dio;
@@ -20,6 +20,7 @@ class CharacterRepositoryImp implements CharacterRepository {
     } on DioException catch (e) {
       throw AppExceptionHandler.handleDioException(e);
     } catch (e) {
+      if (e is AppException) rethrow;
       throw UnknownException(originalException: e.toString());
     }
   }
@@ -30,9 +31,7 @@ List<Character> _handleResponse(Response response) {
     try {
       final data = response.data['results'] as List;
       return data.map((json) => Character.fromJson(json)).toList();
-    } on FormatException catch (e) {
-      throw DataParsingException(originalException: e.toString());
-    } on TypeError catch (e) {
+    } catch (e) {
       throw DataParsingException(originalException: e.toString());
     }
   } else {
