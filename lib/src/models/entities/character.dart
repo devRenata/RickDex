@@ -37,8 +37,8 @@ class Character {
       location: json['location']['name'],
       image: json['image'],
       created: DateTime.parse(json['created']),
-      episodes: (json['episodes'] as List)
-          .map((url) => int.parse(url.split('/').last))
+      episodes: (json['episode'] as List)
+          .map((url) => int.parse(url.toString().split('/').last))
           .toList(),
     );
   }
