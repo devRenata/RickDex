@@ -3,9 +3,9 @@ import 'package:rick/src/core/exceptions/app_exception.dart';
 import 'package:rick/src/models/entities/character.dart';
 import 'package:rick/src/models/repositories/character_repository.dart';
 
-class CharactersViewmodel extends ChangeNotifier {
+class CharacterViewmodel extends ChangeNotifier {
   final CharacterRepository repository;
-  CharactersViewmodel({required this.repository});
+  CharacterViewmodel({required this.repository});
 
   List<Character> _characters = [];
   List<Character> get characters => _characters;

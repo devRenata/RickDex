@@ -1,4 +1,4 @@
 class Endpoints {
-  static const String _baseUrl = 'https://rickandmortyapi.com/api/';
-  static String get characters => '$_baseUrl/character/';
+  static const String baseUrl = 'https://rickandmortyapi.com/api/';
+  static String get characters => '$baseUrl/character/';
 }
