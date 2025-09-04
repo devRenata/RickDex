@@ -11,23 +11,25 @@ class CharacterViewmodel extends ChangeNotifier {
   List<Character> get characters => _characters;
 
   bool isLoading = false;
+  bool isLoadidngMore = false;
   bool hasMore = true;
   int currentPage = 1;
   AppException? error;
 
   Future<void> getCharacters({bool loadMore = false}) async {
-    if (isLoading) return;
+    if (isLoading || isLoadidngMore) return;
 
     try {
-      isLoading = true;
-      error = null;
-
-      if (!loadMore) {
+      if (loadMore) {
+        isLoadidngMore = true;
+      } else {
+        isLoading = true;
         currentPage = 1;
-        _characters = [];
         hasMore = true;
+        _characters = [];
       }
-
+      
+      error = null;
       notifyListeners();
 
       final newCharacters = await repository.getCharacters(page: currentPage);
@@ -47,6 +49,7 @@ class CharacterViewmodel extends ChangeNotifier {
       }
     } finally {
       isLoading = false;
+      isLoadidngMore = false;
       notifyListeners();
     }
   }
@@ -56,7 +59,7 @@ class CharacterViewmodel extends ChangeNotifier {
   }
 
   Future<void> loadMore() async {
-    if (hasMore && !isLoading) {
+    if (hasMore && !isLoading && !isLoadidngMore) {
       await getCharacters(loadMore: true);
     }
   }
