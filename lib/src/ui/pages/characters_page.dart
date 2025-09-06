@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rick/src/ui/themes/app_colors.dart';
 import 'package:rick/src/ui/viewmodels/character_viewmodel.dart';
+import 'package:rick/src/ui/widgets/build_character_card.dart';
 import 'package:rick/src/ui/widgets/build_error_widget.dart';
 import 'package:rick/src/ui/widgets/build_loading_widget.dart';
 
@@ -37,50 +38,82 @@ class _CharactersPageState extends State<CharactersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
+      backgroundColor: AppColors.backgroundGray,
       appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        centerTitle: true,
-        title: const Text(
-          'Characters',
-          style: TextStyle(color: Colors.white),
+        backgroundColor: AppColors.backgroundGray,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.menu),
         ),
       ),
-      body: Consumer<CharacterViewmodel>(
-        builder: (context, viewmodel, child) {
-          if (viewmodel.isLoading && viewmodel.characters.isEmpty) {
-            return const BuildLoadingWidget();
-          }
+      body: SafeArea(
+        child: Consumer<CharacterViewmodel>(
+          builder: (context, viewmodel, child) {
+            if (viewmodel.isLoading && viewmodel.characters.isEmpty) {
+              return const BuildLoadingWidget();
+            }
 
-          if (viewmodel.error != null) {
-            return BuildErrorWidget(
-              exception: viewmodel.error!,
-              onRetry: () => viewmodel.getCharacters(),
+            if (viewmodel.error != null) {
+              return BuildErrorWidget(
+                exception: viewmodel.error!,
+                onRetry: () => viewmodel.getCharacters(),
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async => await viewmodel.refresh(),
+              color: AppColors.primary,
+              backgroundColor: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: Text(
+                      'Characters',
+                      style: TextStyle(
+                        color: AppColors.textBlack,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: size.height * 0.05),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: viewmodel.characters.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: BuildCharacterCard(
+                            onPress: () {},
+                            character: viewmodel.characters[index],
+                          ),
+                        );      
+                      },
+                    ),
+                  ),
+                ],
+              ),
             );
-          }
-
-          return RefreshIndicator(
-            onRefresh: () async => await viewmodel.refresh(),
-            color: AppColors.primary,
-            child: ListView.builder(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: viewmodel.characters.length,
-              itemBuilder: (context, index) {
-                final character = viewmodel.characters[index];
-                return ListTile(
-                  title: Text(character.name),
-                );
-              },
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       final viewmodel = context.read<CharacterViewmodel>();
       if (viewmodel.hasMore && !viewmodel.isLoadidngMore) {
         viewmodel.loadMore();
