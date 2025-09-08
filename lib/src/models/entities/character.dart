@@ -1,52 +1,15 @@
-import 'package:hive_flutter/hive_flutter.dart';
+enum CharacterStatus { alive, dead, genderless, unknown }
 
-part 'character.g.dart';
-
-@HiveType(typeId: 1)
-enum CharacterStatus {
-  @HiveField(0)
-  alive,
-
-  @HiveField(1)
-  dead,
-
-  @HiveField(2)
-  genderless,
-
-  @HiveField(3)
-  unknown,
-}
-
-@HiveType(typeId: 0)
 class Character {
-  @HiveField(0)
   final int id;
-
-  @HiveField(1)
   final String name;
-
-  @HiveField(2)
   final CharacterStatus status;
-
-  @HiveField(3)
   final String species;
-
-  @HiveField(4)
   final String type;
-
-  @HiveField(5)
   final String gender;
-
-  @HiveField(6)
   final String origin;
-
-  @HiveField(7)
   final String location;
-
-  @HiveField(8)
   final String image;
-
-  @HiveField(9)
   final DateTime created;
 
   Character({

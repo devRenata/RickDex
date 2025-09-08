@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'character.dart';
+part of 'character_dto.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CharacterAdapter extends TypeAdapter<Character> {
+class CharacterDtoAdapter extends TypeAdapter<CharacterDto> {
   @override
   final int typeId = 0;
 
   @override
-  Character read(BinaryReader reader) {
+  CharacterDto read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Character(
+    return CharacterDto(
       id: fields[0] as int,
       name: fields[1] as String,
-      status: fields[2] as CharacterStatus,
+      status: fields[2] as String,
       species: fields[3] as String,
       type: fields[4] as String,
       gender: fields[5] as String,
@@ -31,7 +31,7 @@ class CharacterAdapter extends TypeAdapter<Character> {
   }
 
   @override
-  void write(BinaryWriter writer, Character obj) {
+  void write(BinaryWriter writer, CharacterDto obj) {
     writer
       ..writeByte(10)
       ..writeByte(0)
@@ -62,56 +62,7 @@ class CharacterAdapter extends TypeAdapter<Character> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CharacterAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class CharacterStatusAdapter extends TypeAdapter<CharacterStatus> {
-  @override
-  final int typeId = 1;
-
-  @override
-  CharacterStatus read(BinaryReader reader) {
-    switch (reader.readByte()) {
-      case 0:
-        return CharacterStatus.alive;
-      case 1:
-        return CharacterStatus.dead;
-      case 2:
-        return CharacterStatus.genderless;
-      case 3:
-        return CharacterStatus.unknown;
-      default:
-        return CharacterStatus.alive;
-    }
-  }
-
-  @override
-  void write(BinaryWriter writer, CharacterStatus obj) {
-    switch (obj) {
-      case CharacterStatus.alive:
-        writer.writeByte(0);
-        break;
-      case CharacterStatus.dead:
-        writer.writeByte(1);
-        break;
-      case CharacterStatus.genderless:
-        writer.writeByte(2);
-        break;
-      case CharacterStatus.unknown:
-        writer.writeByte(3);
-        break;
-    }
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CharacterStatusAdapter &&
+      other is CharacterDtoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
