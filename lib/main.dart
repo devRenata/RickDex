@@ -4,7 +4,11 @@ import 'package:rick/src/core/dependency_injection.dart';
 import 'package:rick/src/core/router.dart';
 import 'package:rick/src/ui/themes/app_colors.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await DependencyInjection.initLocalStorage();
+
   runApp(
     MultiProvider(
       providers: [
