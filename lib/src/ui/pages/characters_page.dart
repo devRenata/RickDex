@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:rick/src/ui/themes/app_assets.dart';
 import 'package:rick/src/ui/themes/app_colors.dart';
 import 'package:rick/src/ui/viewmodels/character_viewmodel.dart';
 import 'package:rick/src/ui/widgets/build_character_card.dart';
@@ -49,11 +50,8 @@ class _CharactersPageState extends State<CharactersPage> {
         backgroundColor: AppColors.backgroundGray,
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu),
-        ),
       ),
+      drawer: _buildDrawer(),
       body: SafeArea(
         child: Consumer<CharacterViewmodel>(
           builder: (context, viewmodel, child) {
@@ -107,7 +105,7 @@ class _CharactersPageState extends State<CharactersPage> {
                             },
                             character: character,
                           ),
-                        );      
+                        );
                       },
                     ),
                   ),
@@ -128,6 +126,50 @@ class _CharactersPageState extends State<CharactersPage> {
         viewmodel.loadMore();
       }
     }
+  }
+
+  Widget _buildDrawer() {
+    final size = MediaQuery.of(context).size;
+    return Drawer(
+      backgroundColor: AppColors.backgroundGray,
+      width: size.width * 0.65,
+      child: Column(
+        children: [
+          SizedBox(height: size.height * 0.1),
+          Center(
+            child: Image.asset(
+              width: size.width * 0.5,
+              fit: BoxFit.cover,
+              AppAssets.logo,
+            ),
+          ),
+          SizedBox(height: size.height * 0.08),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                ListTile(
+                  tileColor: AppColors.primary.withAlpha(30),
+                  leading: const Icon(
+                    Icons.group,
+                    color: AppColors.primary,
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: AppColors.primary,
+                    size: 18,
+                  ),
+                  title: const Text('Characters'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _setSystemColors() async {

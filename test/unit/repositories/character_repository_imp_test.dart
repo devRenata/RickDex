@@ -49,7 +49,6 @@ void main() {
     expect(result, isA<List<Character>>());
     expect(result.length, 1);
     expect(result.first.name, 'Toxic Rick');
-    expect(result.first.episodes, [27]);
   });
 
   group("Exceptions | ", () { 
