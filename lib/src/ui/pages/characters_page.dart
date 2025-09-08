@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:rick/src/ui/themes/app_colors.dart';
 import 'package:rick/src/ui/viewmodels/character_viewmodel.dart';
@@ -19,6 +21,7 @@ class _CharactersPageState extends State<CharactersPage> {
   @override
   void initState() {
     super.initState();
+    _setSystemColors();
     _scrollController.addListener(_onScroll);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -92,11 +95,17 @@ class _CharactersPageState extends State<CharactersPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       itemCount: viewmodel.characters.length,
                       itemBuilder: (context, index) {
+                        final character = viewmodel.characters[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: BuildCharacterCard(
-                            onPress: () {},
-                            character: viewmodel.characters[index],
+                            onPress: () {
+                              context.pushNamed(
+                                '/character_details',
+                                extra: character,
+                              );
+                            },
+                            character: character,
                           ),
                         );      
                       },
@@ -119,5 +128,12 @@ class _CharactersPageState extends State<CharactersPage> {
         viewmodel.loadMore();
       }
     }
+  }
+
+  Future<void> _setSystemColors() async {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: AppColors.backgroundGray,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
   }
 }

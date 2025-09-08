@@ -90,7 +90,7 @@ class BuildCharacterCard extends StatelessWidget {
           Row(
             spacing: 5,
             children: [
-              BuildCharacterStat(stat: character.status),
+              BuildCharacterStat(stat: character.status.name),
               BuildCharacterStat(stat: character.species),
             ],
           ),

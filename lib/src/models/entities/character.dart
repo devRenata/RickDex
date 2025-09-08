@@ -1,7 +1,9 @@
+enum CharacterStatus { alive, dead, genderless, unknown }
+
 class Character {
   final int id;
   final String name;
-  final String status;
+  final CharacterStatus status;
   final String species;
   final String type;
   final String gender;
@@ -9,7 +11,6 @@ class Character {
   final String location;
   final String image;
   final DateTime created;
-  final List<int> episodes;
 
   Character({
     required this.id,
@@ -22,14 +23,15 @@ class Character {
     required this.location,
     required this.image,
     required this.created,
-    required this.episodes,
   });
 
   factory Character.fromJson(Map<String, dynamic> json) {
     return Character(
       id: json['id'] as int,
       name: json['name'],
-      status: json['status'],
+      status: CharacterStatus.values.byName(
+        (json['status'] as String).toLowerCase(),
+      ),
       species: json['species'],
       type: json['type'],
       gender: json['gender'],
@@ -37,9 +39,6 @@ class Character {
       location: json['location']['name'],
       image: json['image'],
       created: DateTime.parse(json['created']),
-      episodes: (json['episode'] as List)
-          .map((url) => int.parse(url.toString().split('/').last))
-          .toList(),
     );
   }
 
@@ -47,7 +46,7 @@ class Character {
     return {
       'id': id,
       'name': name,
-      'status': status,
+      'status': status.name,
       'species': species,
       'type': type,
       'gender': gender,
@@ -55,7 +54,6 @@ class Character {
       'location': location,
       'image': image,
       'created': created.toIso8601String(),
-      'episodes': episodes,
     };
   }
 }
