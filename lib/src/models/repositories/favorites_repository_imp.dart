@@ -4,7 +4,8 @@ import 'package:rick/src/models/entities/character.dart';
 import 'package:rick/src/models/repositories/favorites_repository.dart';
 
 class FavoritesRepositoryImp implements FavoritesRepository {
-  final Box<CharacterDto> box = Hive.box<CharacterDto>('favorites');
+  final Box<CharacterDto> box;
+  FavoritesRepositoryImp({required this.box});
 
   @override
   Future<List<Character>> getFavorites() async {
