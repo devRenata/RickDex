@@ -15,6 +15,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => DependencyInjection.createCharacterViewmodel(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => DependencyInjection.createFavoritesViewmodel(),
+        ),
       ],
       child: const MyApp(),
     ),

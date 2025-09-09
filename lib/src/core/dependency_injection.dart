@@ -4,7 +4,10 @@ import 'package:rick/src/core/endpoints.dart';
 import 'package:rick/src/models/dtos/character_dto.dart';
 import 'package:rick/src/models/repositories/character_repository.dart';
 import 'package:rick/src/models/repositories/character_repository_imp.dart';
+import 'package:rick/src/models/repositories/favorites_repository.dart';
+import 'package:rick/src/models/repositories/favorites_repository_imp.dart';
 import 'package:rick/src/ui/viewmodels/character_viewmodel.dart';
+import 'package:rick/src/ui/viewmodels/favorites_viewmodel.dart';
 
 class DependencyInjection {
   static Future<void> initLocalStorage() async {
@@ -31,5 +34,14 @@ class DependencyInjection {
 
   static CharacterViewmodel createCharacterViewmodel() {
     return CharacterViewmodel(repository: createCharacterRepository());
+  }
+
+  static FavoritesRepository createFavoritesRepository() {
+    final box = Hive.box<CharacterDto>('favorites');
+    return FavoritesRepositoryImp(box: box);
+  }
+
+  static FavoritesViewmodel createFavoritesViewmodel() {
+    return FavoritesViewmodel(repository: createFavoritesRepository());
   }
 }
