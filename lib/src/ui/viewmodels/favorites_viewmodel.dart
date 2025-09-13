@@ -35,6 +35,22 @@ class FavoritesViewmodel extends ChangeNotifier {
     }
   }
 
+  Future<void> addFavorite({required Character character}) async {
+    await repository.addFavorite(character: character);
+    _favorites.add(character);
+    notifyListeners();
+  }
+
+  Future<void> removeFavorite({required Character character}) async {
+    await repository.removeFavorite(character: character);
+    _favorites.removeWhere((c) => c.id == character.id);
+    notifyListeners();
+  }
+
+  bool isFavorite(Character character) {
+    return _favorites.any((c) => c.id == character.id);
+  }
+
   void clearError() {
     error = null;
     notifyListeners();

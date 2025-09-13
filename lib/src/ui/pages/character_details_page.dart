@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:rick/src/models/entities/character.dart';
 import 'package:rick/src/ui/themes/app_colors.dart';
+import 'package:rick/src/ui/viewmodels/favorites_viewmodel.dart';
 
 class CharacterDetailsPage extends StatefulWidget {
   final Character character;
@@ -62,12 +64,26 @@ class _CharacterDetailsPageState extends State<CharacterDetailsPage> {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.favorite_border_rounded,
-                  color: AppColors.textBlack,
-                ),
+              child: Consumer<FavoritesViewmodel>(
+                builder: (context, viewmodel, child) {
+                  final currentCharacter = widget.character;
+                  final isFavorite = viewmodel.isFavorite(currentCharacter);
+                  return IconButton(
+                    onPressed: () {
+                      if (isFavorite) {
+                        viewmodel.removeFavorite(character: currentCharacter);
+                      } else {
+                        viewmodel.addFavorite(character: currentCharacter);
+                      }
+                    },
+                    icon: Icon(
+                      isFavorite
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
+                      color: isFavorite ? AppColors.primary : AppColors.textBlack,
+                    ),
+                  );
+                },
               ),
             ),
           ),
