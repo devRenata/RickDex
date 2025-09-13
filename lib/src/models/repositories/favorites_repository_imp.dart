@@ -22,6 +22,8 @@ class FavoritesRepositoryImp implements FavoritesRepository {
   @override
   Future<void> addFavorite({required Character character}) async {
     try {
+      if (box.containsKey(character.id)) return;
+
       final dto = CharacterDto.fromEntity(character);
       await box.put(character.id, dto);
     } on HiveError catch (e) {
@@ -34,6 +36,7 @@ class FavoritesRepositoryImp implements FavoritesRepository {
   @override
   Future<void> removeFavorite({required Character character}) async {
     try {
+      if (!box.containsKey(character.id)) return;
       await box.delete(character.id);
     } on HiveError catch (e) {
       throw DataParsingException(originalException: e.toString());
